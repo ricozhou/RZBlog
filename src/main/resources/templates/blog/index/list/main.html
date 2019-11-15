@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<title>[[${blogset.basicsetTitle}]]</title>
+<head th:include="blog/index/common/include_blog::header">
+</head>
+<style>
+</style>
+<body>
+	<nav th:include="blog/index/common/include_blog::navv"></nav>
+	<nav th:include="blog/index/common/include_blog::mnav"></nav>
+	<article>
+		<!-- 纪念日信息 -->
+		<nav class="breadcrumb" id="anniversaryShow" style="display: none">
+			<!-- 左中右布局，先左右再中 -->
+			<div class="notify anniversaryicon">
+				<i class="fa fa-heart"></i>
+			</div>
+			<div class="closenotify">
+				<a href="javascript:void(0)" onclick="closeScroll(this);"><i
+					class="fa fa-close"></i></a>
+			</div>
+			<div id="anniversaryscrolldiv">
+				<div class="scrolltext" id="ascrolltext">
+					<ul class="list-unstyled" id="anniversary-box">
+					</ul>
+				</div>
+			</div>
+		</nav>
+		<!-- 公告信息 -->
+		<nav class="breadcrumb" id="breadcrumb" style="display: none">
+			<!-- 左中右布局，先左右再中 -->
+			<div class="notify">
+				<i class="fa fa-volume-up"></i>
+			</div>
+			<div class="closenotify">
+				<a href="javascript:void(0)" onclick="closeScroll(this);"><i
+					class="fa fa-close"></i></a>
+			</div>
+			<div id="scrolldiv">
+				<div class="scrolltext" id="nscrolltext">
+					<ul class="list-unstyled" id="notice-box">
+					</ul>
+				</div>
+			</div>
+
+		</nav>
+
+		<!--banner begin-->
+		<div class="picsbox">
+			<div class="banner" id="bannerb">
+				<div id="banner" class="fader">
+					<!-- 滚动推荐 -->
+					<div class="fader_controls">
+						<div class="page prev" data-target="prev">&lsaquo;</div>
+						<div class="page next" data-target="next">&rsaquo;</div>
+						<ul class="pager_list">
+						</ul>
+					</div>
+				</div>
+			</div>
+			<!--banner end-->
+			<div class="toppic">
+				<div id="toppic" style="display: none"></div>
+			</div>
+		</div>
+		<div class="blank"></div>
+		<!-- 以下动态生成 -->
+		<!-- sidebar -->
+		<nav th:include="blog/index/common/include_blog::sidebar"></nav>
+		<nav th:include="blog/index/common/include_blog::sidebarL"></nav>
+		<!--bloglist start-->
+		<div class="blogsbox" id="blogsbox"></div>
+		<!--bloglist end-->
+
+		<div id="incomeNum"></div>
+
+	</article>
+	<!-- footer -->
+	<div th:include="blog/index/common/include_blog::footer"></div>
+</body>
+
+<script src="/rzblog/blog/index/list/main.js"
+	th:src="@{/rzblog/blog/index/list/main.js}"></script>
+<script src="/rzblog/blog/index/common/include_blog_last.js"
+	th:src="@{/rzblog/blog/index/common/include_blog_last.js}"></script>
+<script src="/rzblog/blog/index/common/include_blog_style.js"
+	th:src="@{/rzblog/blog/index/common/include_blog_style.js}"></script>
+
+</html>

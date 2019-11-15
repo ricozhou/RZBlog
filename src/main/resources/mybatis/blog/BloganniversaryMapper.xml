@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.rzblog.project.blog.bloganniversary.mapper.BloganniversaryMapper">
+
+	<resultMap type="Bloganniversary" id="BloganniversaryResult">
+		<result property="blogAnniversaryId" column="blog_anniversary_id" />
+		<result property="anniversaryDate" column="anniversary_date" />
+		<result property="anniversaryName" column="anniversary_name" />
+		<result property="anniversaryDesc" column="anniversary_desc" />
+		<result property="anniversaryWebsiteOperate" column="anniversary_website_operate" />
+		<result property="anniversaryWebsiteShow" column="anniversary_website_show" />
+		<result property="status" column="status" />
+		<result property="createBy" column="create_by" />
+		<result property="updateBy" column="update_by" />
+		<result property="createTime" column="create_time" />
+		<result property="updateTime" column="update_time" />
+		<result property="remark" column="remark" />
+	</resultMap>
+
+	<select id="selectBloganniversaryById" parameterType="Integer"
+		resultMap="BloganniversaryResult">
+		select blog_anniversary_id, anniversary_date,
+		anniversary_name,
+		anniversary_desc, anniversary_website_operate,
+		anniversary_website_show, status, create_by, update_by, create_time,
+		update_time, remark from blog_bloganniversary
+		where blog_anniversary_id
+		= #{blogAnniversaryId}
+	</select>
+
+	<select id="selectBloganniversaryList" parameterType="Bloganniversary"
+		resultMap="BloganniversaryResult">
+		select blog_anniversary_id, anniversary_date, anniversary_name,
+		anniversary_desc, anniversary_website_operate,
+		anniversary_website_show, status, create_by, update_by, create_time,
+		update_time, remark from blog_bloganniversary
+		<where>
+			<if test="blogAnniversaryId != null and blogAnniversaryId != ''"> and blog_anniversary_id = #{blogAnniversaryId}</if>
+			<if test="anniversaryDate != null and anniversaryDate != ''"> and anniversary_date = #{anniversaryDate}</if>
+			<if test="anniversaryName != null and anniversaryName != ''"> and anniversary_name = #{anniversaryName}</if>
+			<if test="anniversaryDesc != null and anniversaryDesc != ''"> and anniversary_desc = #{anniversaryDesc}</if>
+			<if
+				test="anniversaryWebsiteOperate != null and anniversaryWebsiteOperate != ''"> and anniversary_website_operate = #{anniversaryWebsiteOperate}
+			</if>
+			<if test="anniversaryWebsiteShow != null and anniversaryWebsiteShow != ''"> and anniversary_website_show = #{anniversaryWebsiteShow}
+			</if>
+			<if test="status != null and status != ''"> and status = #{status}</if>
+			<if test="createBy != null and createBy != ''"> and create_by = #{createBy}</if>
+			<if test="updateBy != null and updateBy != ''"> and update_by = #{updateBy}</if>
+			<if test="createTime != null and createTime != ''"> and create_time = #{createTime}</if>
+			<if test="updateTime != null and updateTime != ''"> and update_time = #{updateTime}</if>
+			<if test="remark != null and remark != ''"> and remark = #{remark}</if>
+			<if test="searchValue != null and searchValue != ''">
+				AND (anniversary_date like concat(concat('%',
+				#{searchValue}),
+				'%') OR anniversary_name like concat(concat('%',
+				#{searchValue}), '%') OR anniversary_desc like concat(concat('%',
+				#{searchValue}), '%'))
+			</if>
+		</where>
+	</select>
+	<select id="selectBloganniversaryListByDate" parameterType="String"
+		resultMap="BloganniversaryResult">
+		select blog_anniversary_id, anniversary_date,
+		anniversary_name,
+		anniversary_desc, anniversary_website_operate,
+		anniversary_website_show, remark from blog_bloganniversary where
+		anniversary_date =
+		#{anniversaryDate} and status = 0
+	</select>
+
+	<insert id="insertBloganniversary" parameterType="Bloganniversary">
+		insert into
+		blog_bloganniversary (
+		anniversary_date,
+		anniversary_name,
+		anniversary_desc,
+		anniversary_website_operate,
+		anniversary_website_show,
+		status,
+		create_by,
+		update_by,
+		create_time,
+		update_time,
+		remark
+		)values(
+		#{anniversaryDate},
+		#{anniversaryName},
+		#{anniversaryDesc},
+		#{anniversaryWebsiteOperate},
+		#{anniversaryWebsiteShow},
+		#{status},
+		#{createBy},
+		#{updateBy},
+		sysdate(),
+		sysdate(),
+		#{remark}
+		)
+	</insert>
+
+	<update id="updateBloganniversary" parameterType="Bloganniversary">
+		update blog_bloganniversary
+		<set>
+			anniversary_date = #{anniversaryDate},
+			anniversary_name =
+			#{anniversaryName},
+			anniversary_desc = #{anniversaryDesc},
+			anniversary_website_operate = #{anniversaryWebsiteOperate},
+			anniversary_website_show = #{anniversaryWebsiteShow},
+			status =
+			#{status},
+			update_by = #{updateBy},
+			update_time = sysdate(),
+			remark =
+			#{remark}
+		</set>
+		where blog_anniversary_id = #{blogAnniversaryId}
+	</update>
+
+	<delete id="deleteBloganniversaryById" parameterType="Integer">
+		delete from
+		blog_bloganniversary where blog_anniversary_id = #{value}
+	</delete>
+
+	<delete id="batchDeleteBloganniversary" parameterType="Integer">
+		delete from blog_bloganniversary where blog_anniversary_id in
+		<foreach item="blogAnniversaryId" collection="array" open="("
+			separator="," close=")">
+			#{blogAnniversaryId}
+		</foreach>
+	</delete>
+
+</mapper>

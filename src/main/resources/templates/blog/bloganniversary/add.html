@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="white-bg">
+	<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+		<form class="form-horizontal m" id="form-bloganniversary-add">
+			<div class="form-group">
+				<label class="col-sm-3 control-label"><em class="gg-star"
+					style="color: red; font-style: normal;">*&nbsp;</em>纪念日日期：</label>
+				<div class="col-sm-2">
+					<select class="form-control" name="anniversaryDateMonth"
+						id="anniversaryDateMonth">
+						<option value="1">1</option>
+						<option value="2">2</option>
+						<option value="3">3</option>
+						<option value="4">4</option>
+						<option value="5">5</option>
+						<option value="6">6</option>
+						<option value="7">7</option>
+						<option value="8">8</option>
+						<option value="9">9</option>
+						<option value="10">10</option>
+						<option value="11">11</option>
+						<option value="12">12</option>
+					</select>
+				</div>
+				<label class="col-sm-1 control-label">月</label>
+				<div class="col-sm-2">
+					<select class="form-control" name="anniversaryDateDay"
+						id="anniversaryDateDay">
+					</select>
+				</div>
+				<label class="col-sm-1 control-label">日</label>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label"><em class="gg-star"
+					style="color: red; font-style: normal;">*&nbsp;</em>纪念日名称：</label>
+				<div class="col-sm-8">
+					<input id="anniversaryName" name="anniversaryName"
+						class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label"><em class="gg-star"
+					style="color: red; font-style: normal;">*&nbsp;</em>纪念日描述：</label>
+				<div class="col-sm-8">
+					<textarea id="anniversaryDesc" name="anniversaryDesc"
+						class="form-control" type="text" rows="8"></textarea>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">整站操作：</label>
+				<div class="col-sm-3">
+					<select class="form-control" name="anniversaryWebsiteOperate"
+						id="anniversaryWebsiteOperate">
+						<option value="0">无操作</option>
+						<option value="1">整站置灰</option>
+					</select>
+				</div>
+				<label class="col-sm-2 control-label">详情显示：</label>
+				<div class="col-sm-3">
+					<select class="form-control" name="anniversaryWebsiteShow"
+						id="anniversaryWebsiteShow">
+						<option value="0">不显示</option>
+						<option value="1">弹窗显示</option>
+						<option value="2">顶部显示</option>
+						<option value="3">侧边显示</option>
+					</select>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">状态：</label>
+				<div class="col-sm-8">
+					<div class="onoffswitch">
+						<input type="checkbox" th:checked="true"
+							class="onoffswitch-checkbox" id="status" name="status"> <label
+							class="onoffswitch-label" for="status"> <span
+							class="onoffswitch-inner"></span> <span
+							class="onoffswitch-switch"></span>
+						</label>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">备注：</label>
+				<div class="col-sm-8">
+					<input id="remark" name="remark" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="form-control-static col-sm-offset-9">
+					<button type="submit" class="btn btn-primary">提交</button>
+					<button th:onclick="'javascript:layer_close()'"
+						class="btn btn-danger" type="button">关闭</button>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div th:include="include::footer"></div>
+	<script src="/rzblog/blog/bloganniversary/add.js"
+		th:src="@{/rzblog/blog/bloganniversary/add.js}">
+		
+	</script>
+</body>
+</html>

@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.rzblog.project.blog.blogadvertisement.mapper.BlogadvertisementMapper">
+
+	<resultMap type="Blogadvertisement" id="BlogadvertisementResult">
+		<result property="blogAdId" column="blog_ad_id" />
+		<result property="adName" column="ad_name" />
+		<result property="adContent" column="ad_content" />
+		<result property="adCompany" column="ad_company" />
+		<result property="adType" column="ad_type" />
+		<result property="adCost" column="ad_cost" />
+		<result property="adImage" column="ad_image" />
+		<result property="adUrl" column="ad_url" />
+		<result property="adPlacementMain" column="ad_placement_main" />
+		<result property="adPlacementConcent" column="ad_placement_concent" />
+		<result property="adPlacementSider" column="ad_placement_sider" />
+		<result property="adStartIme" column="ad_start_ime" />
+		<result property="adEndIme" column="ad_end_ime" />
+		<result property="status" column="status" />
+		<result property="createBy" column="create_by" />
+		<result property="updateBy" column="update_by" />
+		<result property="createTime" column="create_time" />
+		<result property="updateTime" column="update_time" />
+		<result property="remark" column="remark" />
+	</resultMap>
+
+	<select id="selectBlogadvertisementById" parameterType="Integer"
+		resultMap="BlogadvertisementResult">
+		select blog_ad_id, ad_name, ad_content, ad_company, ad_type,
+		ad_cost,
+		ad_image, ad_url,
+		ad_placement_main,ad_placement_concent,ad_placement_sider,
+		ad_start_ime, ad_end_ime,
+		status,
+		create_by, update_by, create_time,
+		update_time, remark from
+		blog_blogadvertisement
+		where blog_ad_id =
+		#{blogAdId}
+	</select>
+
+	<select id="selectBlogadvertisementList" parameterType="Blogadvertisement"
+		resultMap="BlogadvertisementResult">
+		select blog_ad_id, ad_name, ad_content, ad_company, ad_type, ad_cost,
+		ad_image, ad_url,
+		ad_placement_main,ad_placement_concent,ad_placement_sider,
+		ad_start_ime, ad_end_ime, status,
+		create_by, update_by, create_time,
+		update_time, remark from
+		blog_blogadvertisement
+		<where>
+			<if test="blogAdId != null and blogAdId != ''"> and blog_ad_id = #{blogAdId}</if>
+			<if test="adName != null and adName != ''"> and ad_name = #{adName}</if>
+			<if test="adContent != null and adContent != ''"> and ad_content = #{adContent}</if>
+			<if test="adCompany != null and adCompany != ''"> and ad_company = #{adCompany}</if>
+			<if test="adType != null and adType != ''"> and ad_type = #{adType}</if>
+			<if test="adCost != null and adCost != ''"> and ad_cost = #{adCost}</if>
+			<if test="adImage != null and adImage != ''"> and ad_image = #{adImage}</if>
+			<if test="adUrl != null and adUrl != ''"> and ad_url = #{adUrl}</if>
+			<if test="adPlacementMain != null and adPlacementMain != ''"> and ad_placement_main = #{adPlacementMain}</if>
+			<if test="adPlacementConcent != null and adPlacementConcent != ''"> and ad_placement_concent = #{adPlacementConcent}</if>
+			<if test="adPlacementSider != null and adPlacementSider != ''"> and ad_placement_sider = #{adPlacementSider}</if>
+			<if test="adStartIme != null and adStartIme != ''"> and ad_start_ime = #{adStartIme}</if>
+			<if test="adEndIme != null and adEndIme != ''"> and ad_end_ime = #{adEndIme}</if>
+			<if test="status != null and status != ''"> and status = #{status}</if>
+			<if test="createBy != null and createBy != ''"> and create_by = #{createBy}</if>
+			<if test="updateBy != null and updateBy != ''"> and update_by = #{updateBy}</if>
+			<if test="createTime != null and createTime != ''"> and create_time = #{createTime}</if>
+			<if test="updateTime != null and updateTime != ''"> and update_time = #{updateTime}</if>
+			<if test="remark != null and remark != ''"> and remark = #{remark}</if>
+			<if test="searchValue != null and searchValue != ''">
+				AND ad_name like concat(concat('%', #{searchValue}),
+				'%')
+			</if>
+		</where>
+	</select>
+
+	<select id="selectBlogadvertisementListByLimit" parameterType="Blogadvertisement"
+		resultMap="BlogadvertisementResult">
+		select blog_ad_id, ad_name, ad_content, ad_company, ad_type, ad_cost,
+		ad_image, ad_url,
+		ad_placement_main,ad_placement_concent,ad_placement_sider,
+		ad_start_ime, ad_end_ime, status from
+		blog_blogadvertisement
+		<where>
+			status = 0
+			and sysdate() <![CDATA[ >= ]]>
+			ad_start_ime
+			and sysdate() <![CDATA[<= ]]>
+			ad_end_ime
+			<if test="adPlacementMain != null"> and ad_placement_main = #{adPlacementMain}</if>
+			<if test="adPlacementConcent != null"> and ad_placement_concent = #{adPlacementConcent}</if>
+			<if test="adPlacementSider != null"> and ad_placement_sider = #{adPlacementSider}</if>
+		</where>
+		limit #{maxShowNum}
+	</select>
+
+	<insert id="insertBlogadvertisement" parameterType="Blogadvertisement">
+		insert into
+		blog_blogadvertisement (
+		ad_name,
+		ad_content,
+		ad_company,
+		ad_type,
+		ad_cost,
+		ad_image,
+		ad_url,
+		ad_placement_main,
+		ad_placement_concent,
+		ad_placement_sider,
+		ad_start_ime,
+		ad_end_ime,
+		status,
+		create_by,
+		update_by,
+		create_time,
+		update_time,
+		remark
+		)values(
+		#{adName},
+		#{adContent},
+		#{adCompany},
+		#{adType},
+		#{adCost},
+		#{adImage},
+		#{adUrl},
+		#{adPlacementMain},
+		#{adPlacementConcent},
+		#{adPlacementSider},
+		#{adStartIme},
+		#{adEndIme},
+		#{status},
+		#{createBy},
+		#{updateBy},
+		sysdate(),
+		sysdate(),
+		#{remark}
+		)
+	</insert>
+
+	<update id="updateBlogadvertisement" parameterType="Blogadvertisement">
+		update blog_blogadvertisement
+		<set>
+			ad_name = #{adName},
+			ad_content = #{adContent},
+			ad_company =
+			#{adCompany},
+			ad_type = #{adType},
+			ad_cost = #{adCost},
+			ad_image =
+			#{adImage},
+			ad_url
+			= #{adUrl},
+			ad_placement_main = #{adPlacementMain},
+			ad_placement_concent = #{adPlacementConcent},
+			ad_placement_sider =
+			#{adPlacementSider},
+			ad_start_ime =
+			#{adStartIme},
+			ad_end_ime =
+			#{adEndIme},
+			status = #{status},
+			update_by =
+			#{updateBy},
+			update_time =
+			sysdate(),
+			remark = #{remark}
+		</set>
+		where blog_ad_id = #{blogAdId}
+	</update>
+
+	<delete id="deleteBlogadvertisementById" parameterType="Integer">
+		delete
+		from blog_blogadvertisement where blog_ad_id = #{value}
+	</delete>
+
+	<delete id="batchDeleteBlogadvertisement" parameterType="Integer">
+		delete from blog_blogadvertisement where blog_ad_id in
+		<foreach item="blogAdId" collection="array" open="("
+			separator="," close=")">
+			#{blogAdId}
+		</foreach>
+	</delete>
+
+</mapper>

@@ -1,0 +1,445 @@
+<!doctype html>
+<html>
+<head th:include="blog/index/common/include_blog::header"></head>
+<link href="/css/blog/comment.css" rel="stylesheet"
+	th:href="@{/css/blog/comment.css}">
+
+<script src="/js/plugins/summernote/ajax-util.js"
+	th:src="@{/js/plugins/summernote/ajax-util.js}"></script>
+<script src="/js/plugins/summernote/summernote.min.js"
+	th:src="@{/js/plugins/summernote/summernote.min.js}"></script>
+<script src="/js/plugins/summernote/summernote-zh-CN.js"
+	th:src="@{/js/plugins/summernote/summernote-zh-CN.js}"></script>
+<!-- 高亮显示 -->
+<link rel="stylesheet" href="/js/plugins/markdown/simplemde.min.css"
+	th:href="@{/js/plugins/markdown/simplemde.min.css}" />
+<link rel="stylesheet"
+	href="/js/plugins/markdown/github-markdown.min.css"
+	th:href="@{/js/plugins/markdown/github-markdown.min.css}" />
+
+<link rel="stylesheet" href="/js/plugins/markdown/highlight20190222.css"
+	th:href="@{/js/plugins/markdown/highlight20190222.css}" />
+
+<link href="/ajax/libs/highlight/styles/atom-one-dark.css"
+	rel="stylesheet"
+	th:href="@{/ajax/libs/highlight/styles/atom-one-dark.css}">
+
+<!-- <script src="/js/plugins/markdown/highlight.min.js" -->
+<!-- 	th:src="@{/js/plugins/markdown/highlight.min.js}"></script> -->
+
+<script src="/js/plugins/markdown/highlight2.js"
+	th:src="@{/js/plugins/markdown/highlight2.js}"></script>
+
+<script src="/js/plugins/markdown/simplemde.min.js"
+	th:src="@{/js/plugins/markdown/simplemde.min.js}"></script>
+
+<!-- 导出Word -->
+<script src="/js/plugins/htmldownload/FileSaver.js"
+	th:src="@{/js/plugins/htmldownload/FileSaver.js}"></script>
+<!-- 导出Word -->
+<script src="/js/plugins/htmldownload/jquery.wordexport.js"
+	th:src="@{/js/plugins/htmldownload/jquery.wordexport.js}"></script>
+
+<!-- 导出pdf -->
+<script src="/js/plugins/htmldownload/jspdf.debug.js"
+	th:src="@{/js/plugins/htmldownload/jspdf.debug.js}"></script>
+<!-- 复制插件 -->
+<script src="/js/clipboard.min.js" th:src="@{/js/clipboard.min.js}"></script>
+
+<link rel="stylesheet" href="/ajax/libs/jquery-ui/css/jquery-ui.min.css"
+	th:href="@{/ajax/libs/jquery-ui/css/jquery-ui.min.css}" />
+
+<!-- 图片放大插件 -->
+<!-- <link href="/ajax/libs/fancybox/css/jquery.fancybox.css"
+	rel="stylesheet"
+	th:href="@{/ajax/libs/fancybox/css/jquery.fancybox.css}">
+<script src="/ajax/libs/fancybox/js/jquery.fancybox.pack.js"
+	th:src="@{/ajax/libs/fancybox/js/jquery.fancybox.pack.js}"></script> -->
+<style>
+/* 代码样式影响了某些界面字体 */
+.htmledit_views address, .htmledit_views cite, .htmledit_views dfn,
+	.htmledit_views em, .htmledit_views i, .htmledit_views span[lang],
+	.htmledit_views var {
+	font-style: normal
+}
+</style>
+<body>
+	<nav th:include="blog/index/common/include_blog::navv"></nav>
+	<nav th:include="blog/index/common/include_blog::mnav"></nav>
+	<!-- 点击放大显示 -->
+	<div class="imgViewDom" id="imgViewDom" style="display: none;">
+		<img alt="" src="">
+	</div>
+	<article>
+
+		<!--blogsbox start-->
+		<!-- 以下文章动态生成 -->
+
+		<!--blogsbox end-->
+
+		<!-- article -->
+		<h1 class="t_nav">
+			<span id="columnMsg"></span><a href="/rzblog" class="n1" id="n1">首页</a><a
+				href="/" class="n2" id="n2" style="display: none"></a>
+		</h1>
+		<!-- sidebar -->
+		<nav th:include="blog/index/common/include_blog::sidebar"></nav>
+		<nav th:include="blog/index/common/include_blog::sidebarL"></nav>
+		<div class="infosbox">
+			<div class="newsview">
+				<h3 class="news_title" id="news_title"></h3>
+				<!-- 信息栏 -->
+				<div class="bloginfo">
+					<ul id="bloginfo">
+					</ul>
+				</div>
+				<!-- 标签 -->
+				<div class="tags" id="tags"></div>
+				<!-- 版权声明 -->
+				<div class="article-copyright" id="articleCopyright"
+					style="display: none"></div>
+				<hr class="hr0">
+				<!-- 简介 -->
+				<div class="news_about" id="news_about" style="display: none">
+				</div>
+				<div class="news_con summernote markdown-body htmledit_views"
+					id="news_con" style="display: none">
+					<!-- 主文 -->
+				</div>
+				<div th:utext="${blogcontent.content}"
+					class="news_con article-body markdown-body editor-preview-active-side htmledit_views"
+					id="simplemdecontent" style="display: none"></div>
+
+				<div class="share">
+					<div class="dzds">
+						<div class="diggit">
+							<p id="diggit">
+								<a href="javascript:void(0)" onClick="addBlogIndexNum(1)"> <i
+									class="fa fa-thumbs-up"></i>
+								</a>(<b id="diggnum">[[${blogcontent.likeNum}]]</b>)
+							</p>
+						</div>
+						<!-- m.css先加载设置打赏后加载所以缩小时样式失效，外面再加一层嵌套即可 -->
+						<div class="dasbox2">
+							<p class="dasbox" id="dasbox" style="display: none">
+								<a href="javascript:void(0)" onClick="dashangToggle()"
+									class="dashang" title="打赏"><i class="fa fa-rmb"></i> 打赏</a>
+							</p>
+						</div>
+					</div>
+
+
+					<div class="hide_box"></div>
+					<div class="shang_box" id="shang_box">
+						<a class="shang_close" href="javascript:void(0)"
+							onclick="dashangToggle()" title="关闭">关闭</a>
+						<div class="shang_payimg">
+							<img src="" alt="扫码支持" title="扫一扫">
+						</div>
+						<div class="pay_explain">感谢您的支持！</div>
+						<div class="shang_payselect">
+							<div class="pay_item checked" data-id="alipay">
+								<span class="radiobox"></span> <span class="pay_logo"><img
+									src="/img/blog/alipay.jpg" alt="支付宝"></span>
+							</div>
+							<div class="pay_item" data-id="weipay">
+								<span class="radiobox"></span> <span class="pay_logo"><img
+									src="/img/blog/wechat.jpg" alt="微信"></span>
+							</div>
+						</div>
+					</div>
+
+				</div>
+
+				<div class="downContent" id="downContent" style="display: none">
+					<div>
+						<button id="rerun">
+							<i class="fa fa-download"></i>下载(<span id="downloadNum">[[${blogcontent.downloadNum}]]</span>)
+						</button>
+						<button id="select">下载</button>
+					</div>
+					<ul>
+						<li><a href="javascript:void(0)"
+							onClick="downloadBlog('png')">PNG</a></li>
+						<li><a href="javascript:void(0)"
+							onClick="downloadBlog('txt')">TXT</a></li>
+						<li><a href="javascript:void(0)"
+							onClick="downloadBlog('doc')">DOC</a></li>
+						<li><a href="javascript:void(0)"
+							onClick="downloadBlog('pdf')">PDF</a></li>
+					</ul>
+				</div>
+
+				<div class="nextinfo">
+					<p id="upblogcontent"></p>
+					<p id="downblogcontent"></p>
+				</div>
+
+				<!-- 广告位 -->
+				<div class="ad whitebg" id="blogconcentAd" style="display: none">
+					<div class="">
+						<div class="banner2">
+							<div id="banner4" class="fader2">
+
+								<div class="fader2_controls">
+									<div class="page prev" data-target="prev">&lsaquo;</div>
+									<div class="page next" data-target="next">&rsaquo;</div>
+									<ul class="pager_list"></ul>
+								</div>
+
+								<div id="abgc" class="abgc" dir="ltr" aria-hidden="true"
+									style="display: none">
+									<div id="abgb" class="abgb" style="display: block;">
+										<div class="il-wrap">
+											<div class="il-icon">
+												<svg xmlns="http://www.w3.org/2000/svg"
+													xmlns:xlink="http://www.w3.org/1999/xlink"
+													viewBox="0 0 24 16">
+													<path
+														d="M10.90 4.69L10.90 5.57L3.17 5.57L3.17 7.22L3.17 7.22Q3.17 9.15 3.06 10.11L3.06 10.11L3.06 10.11Q2.95 11.07 2.58 11.92L2.58 11.92L2.58 11.92Q2.21 12.77 1.27 13.56L1.27 13.56L0.59 12.93L0.59 12.93Q2.29 11.82 2.29 8.66L2.29 8.66L2.29 4.69L6.11 4.69L6.11 2.95L7.00 2.95L7.00 4.69L10.90 4.69ZM23.00 7.34L23.00 8.22L12.80 8.22L12.80 7.34L17.55 7.34L17.55 5.53L15.12 5.53L15.12 5.53Q14.55 6.53 13.86 7.07L13.86 7.07L13.10 6.46L13.10 6.46Q14.44 5.46 14.95 3.33L14.95 3.33L15.84 3.55L15.84 3.55Q15.77 3.86 15.49 4.65L15.49 4.65L17.55 4.65L17.55 2.84L18.47 2.84L18.47 4.65L21.86 4.65L21.86 5.53L18.47 5.53L18.47 7.34L23.00 7.34ZM21.45 8.88L21.45 13.63L20.53 13.63L20.53 12.78L15.32 12.78L15.32 13.63L14.41 13.63L14.41 8.88L21.45 8.88ZM15.32 11.90L20.53 11.90L20.53 9.76L15.32 9.76L15.32 11.90Z"></path></svg>
+											</div>
+										</div>
+									</div>
+
+								</div>
+								<div id="cbb" class="cbb" aria-hidden="true"
+									style="display: none" onclick="closeAd(this);">
+									<svg xmlns="http://www.w3.org/2000/svg"
+										xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 15 15">
+										<path d="M3.25,3.25l8.5,8.5M11.75,3.25l-8.5,8.5"></path></svg>
+								</div>
+
+
+							</div>
+
+
+
+						</div>
+					</div>
+				</div>
+
+				<div class="otherlink" id="otherlink" style="display: none">
+					<h2>相关文章</h2>
+					<ul id="drelated">
+					</ul>
+				</div>
+				<div class="news_pl" id="news_pl" style="display: block">
+					<h2>文章评论</h2>
+					<div class="gbko" id="gbko"></div>
+
+					<div class="containercomment">
+
+						<div class="commentbox">
+							<form class="commentform" id="form-blogcolumn-add">
+								<div class="commentformInput">
+									<input id="comnickname" class="comnickname" placeholder="昵称"
+										type="text"></input> <input id="comqqnum" class="comqqnum"
+										placeholder="QQ号" type="text"></input> <input id="comemail"
+										class="comemail" placeholder="邮箱" type="text"></input>
+								</div>
+								<textarea cols="80" rows="50" placeholder="请输入评论内容......"
+									class="mytextarea" id="commentcontent"></textarea>
+								<div class="sendcomment" id="comment">评论</div>
+
+							</form>
+						</div>
+						<div class="comment-list"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- article -->
+	</article>
+</body>
+<div th:include="blog/index/common/include_blog::footer"></div>
+<script src="/js/blog/jquery.comment.js"
+	th:src="@{/js/blog/jquery.comment.js}"></script>
+
+<!-- 截图 -->
+<script src="/js/plugins/htmldownload/html2canvas.js"
+	th:src="@{/js/plugins/htmldownload/html2canvas.js}"></script>
+<script src="/js/plugins/htmldownload/canvas2image.js"
+	th:src="@{/js/plugins/htmldownload/canvas2image.js}"></script>
+<script type="text/javascript">
+	$(function() {
+		$(".shang_payimg img").attr("src",
+				blogset.bloggersetBloggerRewardAlipayCollectionCode);
+
+		$(".pay_item")
+				.click(
+						function() {
+							$(this).addClass('checked').siblings('.pay_item')
+									.removeClass('checked');
+							var dataid = $(this).attr('data-id');
+							console.log(dataid)
+							$(".shang_payimg img")
+									.attr(
+											"src",
+											(dataid == 'alipay' ? blogset.bloggersetBloggerRewardAlipayCollectionCode
+													: blogset.bloggersetBloggerRewardWechatCollectionCode));
+							$("#shang_pay_txt").text(
+									dataid == "alipay" ? "支付宝" : "微信");
+						});
+	});
+	function dashangToggle() {
+		$(".hide_box").fadeToggle();
+		$("#shang_box").fadeToggle();
+	}
+</script>
+<script type="text/javascript" th:inline="javascript">
+         var blogcontent=[[${blogcontent}]];
+         var blogcomentList=[[${blogcomentList}]];
+         var blogcolumn=[[${blogcolumn}]];
+         var blogtags=[[${blogtags}]];
+         var basicsetTitle=blogset.basicsetTitle;
+</script>
+
+<script type="text/javascript" th:inline="javascript">
+		$().ready(function() {
+			if(blogcontent.articleEditor==1){
+				//Markdown
+				$("#simplemdecontent").css('display', 'block');
+			}else if(blogcontent.articleEditor==2){
+				//dynamicLoadCssFile('/ajax/libs/simditor/css/simditor.css');
+
+				//html
+				 $("#news_con").css('display', 'block');
+				$('.summernote').summernote({
+					lang : 'zh-CN'
+				});
+				var news_con = blogcontent.content;
+				$('#news_con').code(news_con);
+				$('.summernote').destroy(); 
+			}else if(blogcontent.articleEditor==0){
+				//html
+				
+				$("#news_con").css('display', 'block');
+				$('.summernote').summernote({
+					lang : 'zh-CN'
+				});
+				var news_con = blogcontent.content;
+				$('#news_con').code(news_con);
+				$('.summernote').destroy();
+			}
+			//更新复制按钮使用插件自带按钮
+			
+			//设置复制按钮
+// 			var codeNodes=document.getElementsByTagName('code');
+// 			var clipboardtargetClass;
+// 			var copyHtml;
+// 			if(codeNodes!=null&&codeNodes!=''&&codeNodes.length>0){
+// 				for(var i=0;i<codeNodes.length;i++){
+// 					clipboardtargetClass="clipboardtarget"+i;
+// 					codeNodes[i].classList.add(clipboardtargetClass);
+// 					if(blogcontent.articleEditor==1){
+// 						copyHtml='<div class="hljs-copy-button" data-title="复制" data-clipboard-target=".'+clipboardtargetClass+'"></div>';
+// 					}else{
+// 						/* if(blogcontent.articleSource!='本站'){
+// 							copyHtml='<div class="hljs-copy-button" data-title="复制" data-clipboard-target=".'+clipboardtargetClass+'" style="top:30px;"></div>';
+// 						}else{
+// 							copyHtml='<div class="hljs-copy-button" data-title="复制" data-clipboard-target=".'+clipboardtargetClass+'"></div>';
+// 						} */
+// 						copyHtml='<div class="hljs-copy-button" data-title="复制" data-clipboard-target=".'+clipboardtargetClass+'"></div>';
+// 					}
+// 					codeNodes[i].insertAdjacentHTML('afterEnd', copyHtml);
+// 				}
+// 			}
+			
+			
+	 		//设置复制监听器
+// 			var clipboard = new ClipboardJS('.hljs-copy-button');
+			
+			//监听复制按钮
+// 			$(".hljs-copy-button").click(function() {
+// 				//只是为了改变显示
+// 				var node=$(this);
+				
+// 				//复制成功提示
+// 				node.attr("data-title","复制成功");
+				
+// 				//1秒返回
+// 				setTimeout(function(){
+// 					node.attr("data-title","复制");
+// 				}, 1000);
+// 			}) 
+			
+			
+			
+			//图片插件
+			//给img标签添加外标签a
+			/* $("img").wrap(function(){
+                return '<a  class="fancybox" data-fancybox-group="gallery"/>';
+            });
+			//初始化
+			$('.fancybox').fancybox(); */
+			//点击放大显示
+		    $(".news_con img").click(function () {
+		    	  $("#imgViewDom img").attr("src",this.src); 
+		    	  $("#imgViewDom img").attr("width",this.width*1.3); 
+		    	  $("#imgViewDom img").attr("height",this.height*1.3); 
+		    	  $('#imgViewDom').css("display","-webkit-box");
+		    });
+			$("#imgViewDom").click(function () {
+		    	  $('#imgViewDom').css("display","none");
+		    	  $("#imgViewDom img").attr("src",""); 
+		    });
+		});
+		
+		//上下篇文章
+		var upblogcontent=[[${upblogcontent}]]
+		var downblogcontent=[[${downblogcontent}]]
+		
+		//相关文章
+        var drelatedblogcontentList=[[${drelatedblogcontentList}]]
+	</script>
+<script src="/ajax/libs/jquery-ui/js/jquery-ui.min-10.4.js"
+	th:src="@{/ajax/libs/jquery-ui/js/jquery-ui.min-10.4.js}"></script>
+<script>
+/* 下拉按钮初始化 */
+  $(function() {
+    $( "#rerun" )
+      .button()
+      .click(function() {
+    	  downloadBlog('png');
+      })
+      .next()
+        .button({
+          text: false,
+          icons: {
+            primary: "ui-icon-triangle-1-s"
+          }
+        })
+        .click(function() {
+          var menu = $( this ).parent().next().show().position({
+            my: "left top",
+            at: "left bottom",
+            of: this
+          });
+          $( document ).one( "click", function() {
+            menu.hide();
+          });
+          return false;
+        })
+        .parent()
+          .buttonset()
+          .next()
+            .hide()
+            .menu();
+  });
+  </script>
+<script src="/rzblog/blog/index/detail/blogcontent.js"
+	th:src="@{/rzblog/blog/index/detail/blogcontent.js}"></script>
+<script>
+//初始化高亮
+hljs.initHighlightingOnLoad();
+//初始化复制按钮
+hljs.initCopyButtonOnLoad();
+//初始化显示行数
+hljs.initLineNumbersOnLoad();
+
+</script>
+<script src="/rzblog/blog/index/common/include_blog_last.js"
+	th:src="@{/rzblog/blog/index/common/include_blog_last.js}"></script>
+<script src="/rzblog/blog/index/common/include_blog_style.js"
+	th:src="@{/rzblog/blog/index/common/include_blog_style.js}"></script>
+</html>

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rzblog.project.blog.softcontent.mapper.SoftcontentMapper">
+
+	<resultMap type="Softcontent" id="SoftcontentResult">
+		<result property="cid" column="cid" />
+		<result property="softName" column="soft_name" />
+		<result property="softType" column="soft_type" />
+		<result property="softWebsite" column="soft_website" />
+		<result property="softDownUrl" column="soft_down_url" />
+		<result property="softUpdateUrl" column="soft_update_url" />
+		<result property="softDocUrl" column="soft_doc_url" />
+		<result property="softLicense" column="soft_license" />
+		<result property="softLanguage" column="soft_language" />
+		<result property="softOperateSystem" column="soft_operate_system" />
+		<result property="softAuthor" column="soft_author" />
+		<result property="createBy" column="create_by" />
+		<result property="updateBy" column="update_by" />
+		<result property="createTime" column="create_time" />
+		<result property="updateTime" column="update_time" />
+		<result property="remark" column="remark" />
+	</resultMap>
+
+	<select id="selectSoftcontentById" parameterType="Long"
+		resultMap="SoftcontentResult">
+		select cid, soft_name, soft_type, soft_website,
+		soft_down_url,soft_update_url, soft_doc_url,
+		soft_license,
+		soft_language,
+		soft_operate_system, soft_author,
+		create_by, update_by,
+		create_time,
+		update_time, remark from
+		blog_softcontent
+		where cid = #{cid}
+	</select>
+
+	<select id="selectSoftcontentList" parameterType="Softcontent"
+		resultMap="SoftcontentResult">
+		select cid, soft_name, soft_type, soft_website,
+		soft_down_url,soft_update_url,
+		soft_doc_url, soft_license,
+		soft_language, soft_operate_system,
+		soft_author, create_by, update_by,
+		create_time, update_time, remark
+		from blog_softcontent
+		<where>
+			<if test="cid != null and cid != ''"> and cid = #{cid}</if>
+			<if test="softName != null and softName != ''"> and soft_name = #{softName}</if>
+			<if test="softType != null and softType != ''"> and soft_type = #{softType}</if>
+			<if test="softWebsite != null and softWebsite != ''"> and soft_website = #{softWebsite}</if>
+			<if test="softDownUrl != null and softDownUrl != ''"> and soft_down_url = #{softDownUrl}</if>
+			<if test="softUpdateUrl != null and softUpdateUrl != ''"> and soft_update_url = #{softUpdateUrl}</if>
+			<if test="softDocUrl != null and softDocUrl != ''"> and soft_doc_url = #{softDocUrl}</if>
+			<if test="softLicense != null and softLicense != ''"> and soft_license = #{softLicense}</if>
+			<if test="softLanguage != null and softLanguage != ''"> and soft_language = #{softLanguage}</if>
+			<if test="softOperateSystem != null and softOperateSystem != ''"> and soft_operate_system = #{softOperateSystem}</if>
+			<if test="softAuthor != null and softAuthor != ''"> and soft_author = #{softAuthor}</if>
+			<if test="createBy != null and createBy != ''"> and create_by = #{createBy}</if>
+			<if test="updateBy != null and updateBy != ''"> and update_by = #{updateBy}</if>
+			<if test="createTime != null and createTime != ''"> and create_time = #{createTime}</if>
+			<if test="updateTime != null and updateTime != ''"> and update_time = #{updateTime}</if>
+			<if test="remark != null and remark != ''"> and remark = #{remark}</if>
+		</where>
+	</select>
+
+	<insert id="insertSoftcontent" parameterType="Softcontent">
+		insert into
+		blog_softcontent (
+		cid,
+		soft_name,
+		soft_type,
+		soft_website,
+		soft_down_url,
+		soft_update_url,
+		soft_doc_url,
+		soft_license,
+		soft_language,
+		soft_operate_system,
+		soft_author,
+		create_by,
+		update_by,
+		create_time,
+		update_time,
+		remark
+		)values(
+		#{cid},
+		#{softName},
+		#{softType},
+		#{softWebsite},
+		#{softDownUrl},
+		#{softUpdateUrl},
+		#{softDocUrl},
+		#{softLicense},
+		#{softLanguage},
+		#{softOperateSystem},
+		#{softAuthor},
+		#{createBy},
+		#{updateBy},
+		sysdate(),
+		sysdate(),
+		#{remark}
+		)
+	</insert>
+
+	<update id="updateSoftcontent" parameterType="Softcontent">
+		update blog_softcontent
+		<set>
+			<if test="softName != null and softName != ''">soft_name = #{softName}, </if>
+			<if test="softType != null and softType != ''">soft_type = #{softType}, </if>
+			<if test="softWebsite != null and softWebsite != ''">soft_website = #{softWebsite}, </if>
+			<if test="softDownUrl != null and softDownUrl != ''">soft_down_url = #{softDownUrl}, </if>
+			<if test="softUpdateUrl != null and softUpdateUrl != ''">soft_update_url = #{softUpdateUrl}, </if>
+			<if test="softDocUrl != null and softDocUrl != ''">soft_doc_url = #{softDocUrl}, </if>
+			<if test="softLicense != null and softLicense != ''">soft_license = #{softLicense}, </if>
+			<if test="softLanguage != null and softLanguage != ''">soft_language = #{softLanguage}, </if>
+			<if test="softOperateSystem != null and softOperateSystem != ''">soft_operate_system = #{softOperateSystem}, </if>
+			<if test="softAuthor != null and softAuthor != ''">soft_author = #{softAuthor}, </if>
+			<if test="createBy != null and createBy != ''">create_by = #{createBy}, </if>
+			<if test="updateBy != null and updateBy != ''">update_by = #{updateBy}, </if>
+			<if test="createTime != null and createTime != ''">create_time = #{createTime}, </if>
+			<if test="updateTime != null and updateTime != ''">update_time = #{updateTime}, </if>
+			<if test="remark != null and remark != ''">remark = #{remark}</if>
+		</set>
+		where cid = #{cid}
+	</update>
+
+	<delete id="deleteSoftcontentById" parameterType="Long">
+		delete from
+		blog_softcontent where cid = #{value}
+	</delete>
+
+	<delete id="batchDeleteSoftcontent" parameterType="Long">
+		delete from blog_softcontent where cid in
+		<foreach item="cid" collection="array" open="(" separator=","
+			close=")">
+			#{cid}
+		</foreach>
+	</delete>
+
+</mapper>

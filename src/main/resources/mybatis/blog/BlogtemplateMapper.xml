@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.rzblog.project.blog.blogtemplate.mapper.BlogtemplateMapper">
+
+	<resultMap type="Blogtemplate" id="BlogtemplateResult">
+		<result property="blogTemplateId" column="blog_template_id" />
+		<result property="templateName" column="template_name" />
+		<result property="blogFileName" column="blog_file_name" />
+		<result property="blogType" column="blog_type" />
+		<result property="articleEditor" column="article_editor" />
+		<result property="author" column="author" />
+		<result property="content" column="content" />
+		<result property="contentMd" column="content_md" />
+		<result property="status" column="status" />
+		<result property="createBy" column="create_by" />
+		<result property="updateBy" column="update_by" />
+		<result property="createTime" column="create_time" />
+		<result property="updateTime" column="update_time" />
+		<result property="remark" column="remark" />
+	</resultMap>
+
+	<select id="selectBlogtemplateById" parameterType="Integer"
+		resultMap="BlogtemplateResult">
+		select blog_template_id, template_name, blog_file_name,
+		blog_type,
+		article_editor, author, content, content_md, status,
+		create_by,
+		update_by, create_time, update_time, remark from
+		blog_blogtemplate
+		where blog_template_id = #{blogTemplateId}
+	</select>
+
+	<select id="selectBlogtemplateList" parameterType="Blogtemplate"
+		resultMap="BlogtemplateResult">
+		select blog_template_id, template_name, blog_file_name, blog_type,
+		article_editor, author, content, content_md, status, create_by,
+		update_by, create_time, update_time, remark from blog_blogtemplate
+		<where>
+			<if test="blogTemplateId != null and blogTemplateId != ''"> and blog_template_id = #{blogTemplateId}</if>
+			<if test="templateName != null and templateName != ''"> and template_name = #{templateName}</if>
+			<if test="blogFileName != null and blogFileName != ''"> and blog_file_name = #{blogFileName}</if>
+			<if test="blogType != null and blogType != ''"> and blog_type = #{blogType}</if>
+			<if test="articleEditor != null"> and article_editor = #{articleEditor}</if>
+			<if test="author != null and author != ''"> and author = #{author}</if>
+			<if test="content != null and content != ''"> and content = #{content}</if>
+			<if test="contentMd != null and contentMd != ''"> and content_md = #{contentMd}</if>
+			<if test="status != null"> and status = #{status}</if>
+			<if test="createBy != null and createBy != ''"> and create_by = #{createBy}</if>
+			<if test="updateBy != null and updateBy != ''"> and update_by = #{updateBy}</if>
+			<if test="createTime != null and createTime != ''"> and create_time = #{createTime}</if>
+			<if test="updateTime != null and updateTime != ''"> and update_time = #{updateTime}</if>
+			<if test="remark != null and remark != ''"> and remark = #{remark}</if>
+			<if test="searchValue != null and searchValue != ''">
+				AND template_name like concat(concat('%',
+				#{searchValue}),
+				'%')
+			</if>
+		</where>
+	</select>
+
+	<insert id="insertBlogtemplate" parameterType="Blogtemplate">
+		insert into
+		blog_blogtemplate (
+		template_name,
+		blog_file_name,
+		blog_type,
+		article_editor,
+		author,
+		content,
+		content_md,
+		status,
+		create_by,
+		update_by,
+		create_time,
+		update_time,
+		remark
+		)values(
+		#{templateName},
+		#{blogFileName},
+		#{blogType},
+		#{articleEditor},
+		#{author},
+		#{content},
+		#{contentMd},
+		#{status},
+		#{createBy},
+		#{updateBy},
+		sysdate(),
+		sysdate(),
+		#{remark}
+		)
+	</insert>
+
+	<update id="updateBlogtemplate" parameterType="Blogtemplate">
+		update blog_blogtemplate
+		<set>
+			template_name = #{templateName},
+			blog_file_name = #{blogFileName},
+			blog_type = #{blogType},
+			article_editor = #{articleEditor},
+			author =
+			#{author},
+			content = #{content},
+			content_md = #{contentMd},
+			status =
+			#{status},
+			update_by = #{updateBy},
+			update_time = sysdate(),
+			remark =
+			#{remark}
+		</set>
+		where blog_template_id = #{blogTemplateId}
+	</update>
+
+	<delete id="deleteBlogtemplateById" parameterType="Integer">
+		delete from
+		blog_blogtemplate where blog_template_id = #{value}
+	</delete>
+
+	<delete id="batchDeleteBlogtemplate" parameterType="Integer">
+		delete from blog_blogtemplate where blog_template_id in
+		<foreach item="blogTemplateId" collection="array" open="("
+			separator="," close=")">
+			#{blogTemplateId}
+		</foreach>
+	</delete>
+
+</mapper>

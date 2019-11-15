@@ -1,0 +1,12 @@
+html {
+	filter: progid:DXImageTransform.Microsoft.BasicImage(grayscale=1);
+	/* chrome */
+	-webkit-filter: grayscale(100%);
+	-moz-filter: grayscale(100%);
+	-ms-filter: grayscale(100%);
+	-o-filter: grayscale(100%);
+	/* 火狐 */
+	filter: grayscale(100%);
+	/* ie7-9 */
+	filter: gray;
+}

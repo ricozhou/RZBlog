@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<link href="/ajax/libs/iCheck/custom.css"
+	th:href="@{/ajax/libs/iCheck/custom.css}" rel="stylesheet" />
+<!-- 上传插件 -->
+<link rel="stylesheet"
+	href="/ajax/plugins/bootstrap-fileinput/css/fileinput.css"
+	th:href="@{/ajax/plugins/bootstrap-fileinput/css/fileinput.css}" />
+<link href="/css/font-awesome.css" th:href="@{/css/font-awesome.css}"
+	rel="stylesheet" />
+<body class="gray-bg">
+	<div class="wrapper wrapper-content ">
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="ibox float-e-margins">
+					<div class="ibox-content">
+						<form class="form-horizontal m-t" id="form-blogcontent-edit">
+							<input id="blogColumnNameh" name="blogColumnNameh" type="hidden"
+								th:value="${blogcontent.blogColumnName}"> <input
+								id="cid" name="cid" type="hidden" th:value="${blogcontent.cid}">
+							<input id="showId" name="showId" type="hidden"
+								th:value="${blogcontent.showId}"> <input id="images"
+								name="images" type="hidden" th:value="${blogcontent.images}">
+							<input id="articleEditor" name="articleEditor" type="hidden"
+								th:value="${blogcontent.articleEditor}">
+							<div class="form-group">
+								<label class="col-sm-1 control-label"><em
+									class="gg-star" style="color: red; font-style: normal;">*&nbsp;</em>标题：</label>
+								<div class="col-sm-6">
+									<input id="title" name="title" class="form-control" type="text"
+										th:value="${blogcontent.title}">
+								</div>
+								<label class="col-sm-1 control-label"><em
+									class="gg-star" style="color: red; font-style: normal;">*&nbsp;</em>作者：</label>
+								<div class="col-sm-4">
+									<input id="author" name="author" class="form-control"
+										type="text" th:value="${blogcontent.author}">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-1 control-label">简介：</label>
+								<div class="col-sm-11">
+									<textarea id="introduction" name="introduction" rows="2"
+										class="form-control" th:text="${blogcontent.introduction}"></textarea>
+								</div>
+							</div>
+							<div class="form-group">
+								<input id="content" name="content" type="hidden"
+									th:value="${blogcontent.content}"><input id="contentMd"
+									name="contentMd" type="hidden"
+									th:value="${blogcontent.contentMd}"> <label
+									class="col-sm-1 control-label"><em class="gg-star"
+									style="color: red; font-style: normal;">*&nbsp;</em>内容：</label>
+								<div class="col-sm-11">
+									<div class="ibox-content no-padding">
+										<div id="content_sn" class="summernote" style="display: none"></div>
+										<textarea id="articleField" style="display: none"
+											th:text="${blogcontent.contentMd}"></textarea>
+										<textarea id="articleField2" style="display: none" autofocus></textarea>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-1 control-label">封面：</label>
+								<div class="col-sm-5">
+									<input id="file-1" class="file" type="file" name="file">
+								</div>
+								<div class="col-sm-5" id="show1" align="center"
+									style="display: none">
+									<img id="showImg1" width="285" height="285" src=""></img>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-1 control-label"><em
+									class="gg-star" style="color: red; font-style: normal;">*&nbsp;</em>分类：</label>
+								<div class="col-sm-3">
+									<select class="form-control" name="blogType" id="blogType"
+										th:field="*{blogcontent.blogType}">
+										<option value="0">文章</option>
+										<option value="1">软件</option>
+										<option value="2">影视</option>
+									</select>
+								</div>
+								<label class="col-sm-1 control-label"><em
+									class="gg-star" style="color: red; font-style: normal;">*&nbsp;</em>类型：</label>
+								<div class="col-sm-3">
+									<select class="form-control" name="type" id="type"
+										th:field="*{blogcontent.type}">
+										<option value="原创">原创</option>
+										<option value="转载">转载</option>
+										<option value="翻译">翻译</option>
+									</select>
+								</div>
+								<label class="col-sm-1 control-label"><em
+									class="gg-star" style="color: red; font-style: normal;">*&nbsp;</em>专栏：</label>
+								<div class="col-sm-3">
+									<select class="form-control" name="blogColumnName"
+										id="blogColumnName">
+									</select>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label class="col-sm-1 control-label">标签：</label>
+								<div class="col-sm-11">
+									<label th:each="tag:${tags}" class="checkbox-inline i-checks">
+										<input name="tag" type="checkbox" th:value="${tag.blogTagsId}"
+										th:text="${tag.blogTagsName}" th:checked="${tag.flag}">
+									</label>
+								</div>
+
+							</div>
+							<div class="form-group">
+								<label class="col-sm-1 control-label"></label>
+								<div class="col-sm-11">
+									<div class="col-sm-1" id="addTags2" style="padding-left: 0px">
+										<button class="btn btn-info" type="button"
+											data-toggle="tooltip" title="添加标签" onclick="addTags(this)">
+											<span class="glyphicon glyphicon-plus"></span>
+										</button>
+									</div>
+								</div>
+
+							</div>
+
+							<div class="form-group">
+								<label class="col-sm-1 control-label">置顶：</label>
+								<div class="switch onoffswitch col-sm-1">
+									<div class="onoffswitch">
+										<input type="checkbox"
+											th:checked="${blogcontent.articleTop == 0 ? true : false}"
+											class="onoffswitch-checkbox" id="article_top"
+											name="article_top"> <label class="onoffswitch-label"
+											for="article_top"> <span class="onoffswitch-inner"></span>
+											<span class="onoffswitch-switch"></span>
+										</label>
+									</div>
+								</div>
+								<label class="col-sm-2 control-label">允许评论：</label>
+								<div class="switch onoffswitch col-sm-1">
+									<div class="onoffswitch">
+										<input type="checkbox"
+											th:checked="${blogcontent.allowComment == 0 ? true : false}"
+											class="onoffswitch-checkbox" id="allow_comment"
+											name="allow_comment"> <label
+											class="onoffswitch-label" for="allow_comment"> <span
+											class="onoffswitch-inner"></span> <span
+											class="onoffswitch-switch"></span>
+										</label>
+									</div>
+								</div>
+
+								<label class="col-sm-2 control-label">允许转载：</label>
+								<div class="switch onoffswitch col-sm-2">
+									<div class="onoffswitch">
+										<input type="checkbox"
+											th:checked="${blogcontent.allowPing == 0 ? true : false}"
+											class="onoffswitch-checkbox" id="ping" name="ping"> <label
+											class="onoffswitch-label" for="ping"> <span
+											class="onoffswitch-inner"></span> <span
+											class="onoffswitch-switch"></span>
+										</label>
+									</div>
+								</div>
+								<label class="col-sm-2 control-label">开启简介：</label>
+								<div class="switch onoffswitch col-sm-2">
+									<div class="onoffswitch">
+										<input type="checkbox"
+											th:checked="${blogcontent.showIntroduction == 0 ? true : false}"
+											class="onoffswitch-checkbox" id="allow_introduction"
+											name="allow_introduction"> <label
+											class="onoffswitch-label" for="allow_introduction"> <span
+											class="onoffswitch-inner"></span> <span
+											class="onoffswitch-switch"></span>
+										</label>
+									</div>
+								</div>
+								<label class="col-sm-2 control-label">私密文章：</label>
+								<div class="switch onoffswitch col-sm-2">
+									<div class="onoffswitch">
+										<input type="checkbox"
+											th:checked="${blogcontent.privateArticle == 0 ? true : false}"
+											class="onoffswitch-checkbox" id="private_article"
+											name="private_article"> <label
+											class="onoffswitch-label" for="private_article"> <span
+											class="onoffswitch-inner"></span> <span
+											class="onoffswitch-switch"></span>
+										</label>
+									</div>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label class="col-sm-1 control-label">下载：</label>
+								<div class="switch onoffswitch col-sm-2">
+									<div class="onoffswitch">
+										<input type="checkbox"
+											th:checked="${blogcontent.allowDownload == 0 ? true : false}"
+											class="onoffswitch-checkbox" id="allow_download"
+											name="allow_download"> <label
+											class="onoffswitch-label" for="allow_download"> <span
+											class="onoffswitch-inner"></span> <span
+											class="onoffswitch-switch"></span>
+										</label>
+									</div>
+								</div>
+								<label class="col-sm-2 control-label"><i
+									class="fa fa-question-circle" title="按照既定配置推送链接至百度，若失败则无提示"></i>&nbsp;立即推送：</label>
+								<div class="col-sm-1">
+									<label class="checkbox-inline i-checks"> <input
+										th:checked="false" name="nowPushBaidu" id="nowPushBaidu"
+										type="checkbox">
+									</label>
+								</div>
+								<label class="col-sm-2 control-label">文章来源：</label>
+								<div class="col-sm-2">
+									<input id="articleSource" name="articleSource"
+										class="form-control" type="text"
+										th:value="${blogcontent.articleSource}">
+								</div>
+							</div>
+							<div id="softContent" style="display: none;">
+								<div class="form-group">
+									<label class="col-sm-12 control-label"> </label>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-1 control-label"><em
+										class="gg-star" style="color: red; font-style: normal;">*&nbsp;</em>软件名称：</label>
+									<div class="col-sm-6">
+										<input id="softName" name="softName" class="form-control"
+											th:value="${blogcontent.softcontent.softName}" type="text">
+									</div>
+									<label class="col-sm-1 control-label"><em
+										class="gg-star" style="color: red; font-style: normal;">*&nbsp;</em>软件作者：</label>
+									<div class="col-sm-4">
+										<input id="softAuthor" name="softAuthor" class="form-control"
+											type="text" th:value="${blogcontent.softcontent.softAuthor}">
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-1 control-label">软件官网：</label>
+									<div class="col-sm-5">
+										<input id="softWebsite" name="softWebsite"
+											class="form-control" type="text"
+											th:value="${blogcontent.softcontent.softWebsite}">
+									</div>
+									<label class="col-sm-1 control-label"><i
+										class="fa fa-question-circle"
+										title="该更新链接针对本同源软件项目，自动替换下载地址等信息"></i>&nbsp;更新地址：</label>
+									<div class="col-sm-5">
+										<input id="softUpdateUrl" name="softUpdateUrl"
+											class="form-control" type="text"
+											th:value="${blogcontent.softcontent.softUpdateUrl}">
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-1 control-label">下载地址：</label>
+									<div class="col-sm-5">
+										<input id="softDownUrl" name="softDownUrl"
+											class="form-control" type="text"
+											th:value="${blogcontent.softcontent.softDownUrl}">
+									</div>
+									<label class="col-sm-1 control-label">文档地址：</label>
+									<div class="col-sm-5">
+										<input id="softDocUrl" name="softDocUrl" class="form-control"
+											type="text" th:value="${blogcontent.softcontent.softDocUrl}">
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-1 control-label"><em
+										class="gg-star" style="color: red; font-style: normal;">*&nbsp;</em>软件类型：</label>
+									<div class="col-sm-2">
+										<select class="form-control" name="softType" id="softType"
+											th:field="*{blogcontent.softcontent.softType}">
+											<option value="大数据">大数据</option>
+											<option value="数据存储">数据存储</option>
+											<option value="数据处理">数据处理</option>
+											<option value="可视化">可视化</option>
+											<option value="数据查询">数据查询</option>
+											<option value="其他">其他</option>
+											<option value="Web应用开发">Web应用开发</option>
+											<option value="SPDY开发包">SPDY开发包</option>
+											<option value="HTML5开发相关">HTML5开发相关</option>
+											<option value="Pjax相关项目">Pjax相关项目</option>
+											<option value="网站API">网站API</option>
+											<option value="REST/RESTful项目">REST/RESTful项目</option>
+											<option value="响应式Web框架">响应式Web框架</option>
+											<option value="JavaScriptMVC框架">JavaScriptMVC框架</option>
+											<option value="WebDAV开源软件">WebDAV开源软件</option>
+											<option value="AngularJS扩展">AngularJS扩展</option>
+											<option value="后台管理系统">后台管理系统</option>
+											<option value="Vue组件">Vue组件</option>
+											<option value="Google相关API">Google相关API</option>
+											<option value="网页开发工具">网页开发工具</option>
+											<option value="Web框架">Web框架</option>
+											<option value="J2EE框架">J2EE框架</option>
+											<option value="AJAX框架/RIA">AJAX框架/RIA</option>
+											<option value="文件上传组件">文件上传组件</option>
+											<option value="JSON/BSON开发包">JSON/BSON开发包</option>
+											<option value="OData开发包">OData开发包</option>
+											<option value="HTML解析器">HTML解析器</option>
+											<option value="Flash开发包">Flash开发包</option>
+											<option value="常用JavaScript包">常用JavaScript包</option>
+											<option value="浏览器/JS引擎">浏览器/JS引擎</option>
+											<option value="语法着色和高亮">语法着色和高亮</option>
+											<option value="可视化HTML编辑器">可视化HTML编辑器</option>
+											<option value="网页组件">网页组件</option>
+											<option value="WEB服务/SOAP/SOA">WEB服务/SOAP/SOA</option>
+											<option value="RPC/XMLRPC项目">RPC/XMLRPC项目</option>
+											<option value="RSS/ATOM相关">RSS/ATOM相关</option>
+											<option value="单点登录框架">单点登录框架</option>
+											<option value="服务器端JavaScript">服务器端JavaScript</option>
+											<option value="Node.js扩展">Node.js扩展</option>
+											<option value="WebSocket开发包">WebSocket开发包</option>
+											<option value="OpenID开发包">OpenID开发包</option>
+											<option value="OAuth开发包">OAuth开发包</option>
+											<option value="标签库">标签库</option>
+											<option value="CSS框架">CSS框架</option>
+											<option value="验证码">验证码</option>
+											<option value="Web多媒体播放器">Web多媒体播放器</option>
+											<option value="手机/移动开发">手机/移动开发</option>
+											<option value="AndroidUI组件">AndroidUI组件</option>
+											<option value="微信开发/微信公众号开发">微信开发/微信公众号开发</option>
+											<option value="React开源项目">React开源项目</option>
+											<option value="网站客户端">网站客户端</option>
+											<option value="NativeScript插件">NativeScript插件</option>
+											<option value="微信小程序">微信小程序</option>
+											<option value="iPhone/iPad开发工具">iPhone/iPad开发工具</option>
+											<option value="WP7开发工具">WP7开发工具</option>
+											<option value="手机开发工具">手机开发工具</option>
+											<option value="手机Web开发框架">手机Web开发框架</option>
+											<option value="手机开发包">手机开发包</option>
+											<option value="手机相关软件">手机相关软件</option>
+											<option value="手机游戏">手机游戏</option>
+											<option value="手机操作系统">手机操作系统</option>
+											<option value="iOS/iPhone/iPad开发包">iOS/iPhone/iPad开发包</option>
+											<option value="iOS代码库">iOS代码库</option>
+											<option value="Activity">Activity</option>
+											<option value="下拉刷新">下拉刷新</option>
+											<option value="菜单">菜单</option>
+											<option value="位置信息">位置信息</option>
+											<option value="iOS表单">iOS表单</option>
+											<option value="提醒">提醒</option>
+											<option value="iOS数据库">iOS数据库</option>
+											<option value="按钮">按钮</option>
+											<option value="列表">列表</option>
+											<option value="图像">图像</option>
+											<option value="滚动视图">滚动视图</option>
+											<option value="选择器">选择器</option>
+											<option value="标签">标签</option>
+											<option value="地图">地图</option>
+											<option value="导航条">导航条</option>
+											<option value="进度条">进度条</option>
+											<option value="指示器">指示器</option>
+											<option value="开关">开关</option>
+											<option value="滑杆">滑杆</option>
+											<option value="选项卡">选项卡</option>
+											<option value="状态栏">状态栏</option>
+											<option value="分段选择">分段选择</option>
+											<option value="网页">网页</option>
+											<option value="文字视图">文字视图</option>
+											<option value="视图布局">视图布局</option>
+											<option value="视图切换">视图切换</option>
+											<option value="弹出视图">弹出视图</option>
+											<option value="手势交互">手势交互</option>
+											<option value="绘图">绘图</option>
+											<option value="动画">动画</option>
+											<option value="图表">图表</option>
+											<option value="音频声效">音频声效</option>
+											<option value="视频">视频</option>
+											<option value="网络">网络</option>
+											<option value="高级UI组件">高级UI组件</option>
+											<option value="键盘">键盘</option>
+											<option value="游戏">游戏</option>
+											<option value="支付">支付</option>
+											<option value="其他">其他</option>
+											<option value="程序开发">程序开发</option>
+											<option value="脚本编程语言">脚本编程语言</option>
+											<option value="地图相关">地图相关</option>
+											<option value="Epub电子图书工具">Epub电子图书工具</option>
+											<option value="UI组件库">UI组件库</option>
+											<option value="代码生成工具">代码生成工具</option>
+											<option value="SVG开发包">SVG开发包</option>
+											<option value="推荐引擎">推荐引擎</option>
+											<option value="指纹识别">指纹识别</option>
+											<option value="拼音转换工具包">拼音转换工具包</option>
+											<option value="蓝牙开发">蓝牙开发</option>
+											<option value="SpringData扩展">SpringData扩展</option>
+											<option value="微服务框架">微服务框架</option>
+											<option value="压缩算法">压缩算法</option>
+											<option value="GUI开发框架">GUI开发框架</option>
+											<option value="Swing开发包">Swing开发包</option>
+											<option value="常用工具包">常用工具包</option>
+											<option value="报表/图表制作">报表/图表制作</option>
+											<option value="模板引擎">模板引擎</option>
+											<option value="搜索引擎">搜索引擎</option>
+											<option value="中文分词库">中文分词库</option>
+											<option value="缓存系统">缓存系统</option>
+											<option value="网络工具包">网络工具包</option>
+											<option value="高性能网络开发库">高性能网络开发库</option>
+											<option value="并发/并行处理框架">并发/并行处理框架</option>
+											<option value="数据库连接池">数据库连接池</option>
+											<option value="作业/任务调度">作业/任务调度</option>
+											<option value="图形/图像处理">图形/图像处理</option>
+											<option value="3D图形处理库">3D图形处理库</option>
+											<option value="多媒体处理">多媒体处理</option>
+											<option value="Excel开发包">Excel开发包</option>
+											<option value="XML相关工具">XML相关工具</option>
+											<option value="日志工具">日志工具</option>
+											<option value="OSGi框架">OSGi框架</option>
+											<option value="ORM/持久层框架">ORM/持久层框架</option>
+											<option value="服务框架/平台">服务框架/平台</option>
+											<option value="工作流引擎">工作流引擎</option>
+											<option value="业务规则引擎">业务规则引擎</option>
+											<option value="面向方面AOP/IoC">面向方面AOP/IoC</option>
+											<option value="加密/解密软件包">加密/解密软件包</option>
+											<option value="安全相关框架">安全相关框架</option>
+											<option value="TTS/语音合成和处理">TTS/语音合成和处理</option>
+											<option value="游戏开发包">游戏开发包</option>
+											<option value="Windows桌面开发组件">Windows桌面开发组件</option>
+											<option value="条形码/二维码">条形码/二维码</option>
+											<option value="OCR开发包">OCR开发包</option>
+											<option value="正则表达式工具">正则表达式工具</option>
+											<option value="Markdown开发包">Markdown开发包</option>
+											<option value="短信彩信开发包">短信彩信开发包</option>
+											<option value="数学计算">数学计算</option>
+											<option value="MathML开发包">MathML开发包</option>
+											<option value="代码练习">代码练习</option>
+											<option value="协议和规范">协议和规范</option>
+											<option value="Emoji表情相关">Emoji表情相关</option>
+											<option value="其他开发相关">其他开发相关</option>
+											<option value="开发工具">开发工具</option>
+											<option value="反编译工具">反编译工具</option>
+											<option value="持续集成系统">持续集成系统</option>
+											<option value="SQL注入工具">SQL注入工具</option>
+											<option value="Git开源工具">Git开源工具</option>
+											<option value="Java开发工具">Java开发工具</option>
+											<option value=".NET开发工具">.NET开发工具</option>
+											<option value="PHP开发工具">PHP开发工具</option>
+											<option value="C/C++开发工具">C/C++开发工具</option>
+											<option value="Ruby/Rails开发工具">Ruby/Rails开发工具</option>
+											<option value="Python开发工具">Python开发工具</option>
+											<option value="Perl开发工具">Perl开发工具</option>
+											<option value="BUG跟踪管理">BUG跟踪管理</option>
+											<option value="项目构建">项目构建</option>
+											<option value="单元测试工具">单元测试工具</option>
+											<option value="测试工具">测试工具</option>
+											<option value="GUI测试工具">GUI测试工具</option>
+											<option value="性能测试和优化">性能测试和优化</option>
+											<option value="程序调试工具">程序调试工具</option>
+											<option value="代码混淆和加密">代码混淆和加密</option>
+											<option value="UML/模型工具">UML/模型工具</option>
+											<option value="界面原型设计工具">界面原型设计工具</option>
+											<option value="安装制作工具">安装制作工具</option>
+											<option value="编译器">编译器</option>
+											<option value="代码管理分析/审查/优化">代码管理分析/审查/优化</option>
+											<option value="程序文档工具">程序文档工具</option>
+											<option value="语法解析工具">语法解析工具</option>
+											<option value="汇编开发工具">汇编开发工具</option>
+											<option value="jQuery插件">jQuery插件</option>
+											<option value="jQuery自动完成插件">jQuery自动完成插件</option>
+											<option value="jQuery分页插件">jQuery分页插件</option>
+											<option value="jQuery文件上传">jQuery文件上传</option>
+											<option value="jQuery地图插件">jQuery地图插件</option>
+											<option value="jQuery对话框">jQuery对话框</option>
+											<option value="jQuery图片展示/幻灯插件">jQuery图片展示/幻灯插件</option>
+											<option value="jQuery图表">jQuery图表</option>
+											<option value="jQueryTabs">jQueryTabs</option>
+											<option value="jQueryUI框架">jQueryUI框架</option>
+											<option value="jQuery日期选择/日历">jQuery日期选择/日历</option>
+											<option value="jQuery菜单">jQuery菜单</option>
+											<option value="jQuery表单及相关">jQuery表单及相关</option>
+											<option value="jQueryTooltips">jQueryTooltips</option>
+											<option value="jQuery树形控件">jQuery树形控件</option>
+											<option value="jQuery图像处理">jQuery图像处理</option>
+											<option value="jQuery页面滚动插件">jQuery页面滚动插件</option>
+											<option value="jQuery表格插件">jQuery表格插件</option>
+											<option value="jQuery颜色选择插件">jQuery颜色选择插件</option>
+											<option value="jQuery语法着色">jQuery语法着色</option>
+											<option value="jQuery多媒体插件">jQuery多媒体插件</option>
+											<option value="jQuery高级页面组件">jQuery高级页面组件</option>
+											<option value="jQuery的Cookie和参数处理">jQuery的Cookie和参数处理</option>
+											<option value="jQuery手机相关插件">jQuery手机相关插件</option>
+											<option value="jQuery定时器插件">jQuery定时器插件</option>
+											<option value="jQuery界面效果">jQuery界面效果</option>
+											<option value="其他jQuery插件">其他jQuery插件</option>
+											<option value="建站系统">建站系统</option>
+											<option value="分类网站程序">分类网站程序</option>
+											<option value="众筹平台">众筹平台</option>
+											<option value="团购网站系统">团购网站系统</option>
+											<option value="开源轻博客系统">开源轻博客系统</option>
+											<option value="开源博客系统">开源博客系统</option>
+											<option value="视频网站系统">视频网站系统</option>
+											<option value="开源微博工具">开源微博工具</option>
+											<option value="论坛系统BBS">论坛系统BBS</option>
+											<option value="建站系统CMS">建站系统CMS</option>
+											<option value="网店系统/电子商务">网店系统/电子商务</option>
+											<option value="SNS社交网络/交友平台">SNS社交网络/交友平台</option>
+											<option value="开源问答系统">开源问答系统</option>
+											<option value="WIKI系统">WIKI系统</option>
+											<option value="个人知识管理系统">个人知识管理系统</option>
+											<option value="Web邮件系统">Web邮件系统</option>
+											<option value="门户平台PORTAL">门户平台PORTAL</option>
+											<option value="投票系统/问卷调查">投票系统/问卷调查</option>
+											<option value="网络会议/视频会议">网络会议/视频会议</option>
+											<option value="相册/照片/多媒体系统">相册/照片/多媒体系统</option>
+											<option value="在线帮助和支持系统">在线帮助和支持系统</option>
+											<option value="在线IT服务网站">在线IT服务网站</option>
+											<option value="短网址服务">短网址服务</option>
+											<option value="服务器软件套件">服务器软件套件</option>
+											<option value="企业应用">企业应用</option>
+											<option value="企业搜索引擎">企业搜索引擎</option>
+											<option value="ESB企业服务总线">ESB企业服务总线</option>
+											<option value="LaTeX排版系统">LaTeX排版系统</option>
+											<option value="软电话交换机/VOIP/PBX">软电话交换机/VOIP/PBX</option>
+											<option value="邮件列表管理">邮件列表管理</option>
+											<option value="开源医疗项目">开源医疗项目</option>
+											<option value="人力资源管理">人力资源管理</option>
+											<option value="家庭自动化系统">家庭自动化系统</option>
+											<option value="ETL工具框架">ETL工具框架</option>
+											<option value="BI商业智能">BI商业智能</option>
+											<option value="POS系统">POS系统</option>
+											<option value="OA办公/协作平台">OA办公/协作平台</option>
+											<option value="企业ERP/CRM/进销存">企业ERP/CRM/进销存</option>
+											<option value="开源SIP项目">开源SIP项目</option>
+											<option value="通讯录管理">通讯录管理</option>
+											<option value="地理信息系统GIS">地理信息系统GIS</option>
+											<option value="文档管理">文档管理</option>
+											<option value="任务/项目管理">任务/项目管理</option>
+											<option value="教学科研相关">教学科研相关</option>
+											<option value="金融/财务/证券系统">金融/财务/证券系统</option>
+											<option value="电子电路设计软件">电子电路设计软件</option>
+											<option value="计算机辅助设计CAD/CAM">计算机辅助设计CAD/CAM</option>
+											<option value="数据取证软件">数据取证软件</option>
+											<option value="服务器软件">服务器软件</option>
+											<option value="Apache模块">Apache模块</option>
+											<option value="Nginx扩展模块">Nginx扩展模块</option>
+											<option value="Radius相关">Radius相关</option>
+											<option value="服务发现/注册和协调">服务发现/注册和协调</option>
+											<option value="应用服务器">应用服务器</option>
+											<option value="HTTP服务器">HTTP服务器</option>
+											<option value="FastCGI服务器">FastCGI服务器</option>
+											<option value="文件服务器">文件服务器</option>
+											<option value="邮件服务器">邮件服务器</option>
+											<option value="缓存服务器">缓存服务器</option>
+											<option value="版本控制系统">版本控制系统</option>
+											<option value="路由器/防火墙">路由器/防火墙</option>
+											<option value="代理服务器软件">代理服务器软件</option>
+											<option value="电话/通讯/IM聊天">电话/通讯/IM聊天</option>
+											<option value="Web加速缓存软件">Web加速缓存软件</option>
+											<option value="终端服务器/远程连接">终端服务器/远程连接</option>
+											<option value="虚拟机">虚拟机</option>
+											<option value="文件同步">文件同步</option>
+											<option value="集群/负载均衡">集群/负载均衡</option>
+											<option value="分布式应用/网格">分布式应用/网格</option>
+											<option value="目录服务LDAP">目录服务LDAP</option>
+											<option value="流媒体服务器">流媒体服务器</option>
+											<option value="DNS服务器">DNS服务器</option>
+											<option value="存储系统">存储系统</option>
+											<option value="JMS/消息中间件">JMS/消息中间件</option>
+											<option value="XMPP即时通讯">XMPP即时通讯</option>
+											<option value="DHCP软件">DHCP软件</option>
+											<option value="Tomcat扩展项目">Tomcat扩展项目</option>
+											<option value="数据库相关">数据库相关</option>
+											<option value="图数据库">图数据库</option>
+											<option value="时序数据库">时序数据库</option>
+											<option value="数据库服务器">数据库服务器</option>
+											<option value="NoSQL数据库">NoSQL数据库</option>
+											<option value="MySQL衍生版">MySQL衍生版</option>
+											<option value="开源XML数据库">开源XML数据库</option>
+											<option value="数据库管理工具">数据库管理工具</option>
+											<option value="数据库调整和优化">数据库调整和优化</option>
+											<option value="数据库驱动程序">数据库驱动程序</option>
+											<option value="数据库建模">数据库建模</option>
+											<option value="应用工具">应用工具</option>
+											<option value="思维导图软件">思维导图软件</option>
+											<option value="博客客户端">博客客户端</option>
+											<option value="浏览器">浏览器</option>
+											<option value="邮件工具">邮件工具</option>
+											<option value="文档/文本编辑">文档/文本编辑</option>
+											<option value="杀毒软件">杀毒软件</option>
+											<option value="终端/远程登录">终端/远程登录</option>
+											<option value="IM/聊天/语音工具">IM/聊天/语音工具</option>
+											<option value="下载工具">下载工具</option>
+											<option value="文件传输工具">文件传输工具</option>
+											<option value="P2P/BT">P2P/BT</option>
+											<option value="图形和图像工具">图形和图像工具</option>
+											<option value="开源图标">开源图标</option>
+											<option value="多媒体工具">多媒体工具</option>
+											<option value="压缩、解压缩">压缩、解压缩</option>
+											<option value="个人助理软件">个人助理软件</option>
+											<option value="网络爬虫">网络爬虫</option>
+											<option value="磁盘/光驱工具">磁盘/光驱工具</option>
+											<option value="文件管理器">文件管理器</option>
+											<option value="RSS/Atom工具">RSS/Atom工具</option>
+											<option value="科研计算工具">科研计算工具</option>
+											<option value="操作系统工具">操作系统工具</option>
+											<option value="插件和扩展">插件和扩展</option>
+											<option value="Eclipse插件">Eclipse插件</option>
+											<option value="FireFox插件">FireFox插件</option>
+											<option value="IE插件">IE插件</option>
+											<option value="Prototype扩展">Prototype扩展</option>
+											<option value="Chrome插件/扩展">Chrome插件/扩展</option>
+											<option value="WordPress插件">WordPress插件</option>
+											<option value="NetBeans插件">NetBeans插件</option>
+											<option value="IDEA插件">IDEA插件</option>
+											<option value="Xcode插件">Xcode插件</option>
+											<option value="VisualStudio插件">VisualStudio插件</option>
+											<option value="SublimeText扩展">SublimeText扩展</option>
+											<option value="VisualStudioCode扩展">VisualStudioCode扩展</option>
+											<option value="Atom插件">Atom插件</option>
+											<option value="游戏/娱乐">游戏/娱乐</option>
+											<option value="休闲游戏">休闲游戏</option>
+											<option value="网络游戏">网络游戏</option>
+											<option value="单机游戏">单机游戏</option>
+											<option value="游戏模拟器/工具/引擎">游戏模拟器/工具/引擎</option>
+											<option value="云计算">云计算</option>
+											<option value="PaaS系统/容器">PaaS系统/容器</option>
+											<option value="Docker扩展">Docker扩展</option>
+											<option value="SDN/OpenFlow">SDN/OpenFlow</option>
+											<option value="Docker映像">Docker映像</option>
+											<option value="Serverless系统">Serverless系统</option>
+											<option value="管理和监控">管理和监控</option>
+											<option value="系统监控">系统监控</option>
+											<option value="日志分析和统计">日志分析和统计</option>
+											<option value="性能优化">性能优化</option>
+											<option value="数据备份">数据备份</option>
+											<option value="网管运维工具">网管运维工具</option>
+											<option value="漏洞检测扫描和评估">漏洞检测扫描和评估</option>
+											<option value="其他开源">其他开源</option>
+											<option value="硬件驱动/工具">硬件驱动/工具</option>
+											<option value="Linux内核">Linux内核</option>
+											<option value="桌面环境">桌面环境</option>
+											<option value="开源字体">开源字体</option>
+											<option value="嵌入式操作系统">嵌入式操作系统</option>
+											<option value="输入法">输入法</option>
+											<option value="开源硬件">开源硬件</option>
+											<option value="开源图书">开源图书</option>
+											<option value="开源家居">开源家居</option>
+											<option value="物联网">物联网</option>
+											<option value="开源货币/比特币">开源货币/比特币</option>
+											<option value="NASA开源项目">NASA开源项目</option>
+											<option value="无线路由固件">无线路由固件</option>
+											<option value="开源汽车/车载系统">开源汽车/车载系统</option>
+											<option value="虚拟现实/增强现实">虚拟现实/增强现实</option>
+											<option value="区块链">区块链</option>
+											<option value="开源3D打印机">开源3D打印机</option>
+											<option value="量子计算">量子计算</option>
+											<option value="RISC-V">RISC-V</option>
+											<option value="神经网络/人工智能">神经网络/人工智能</option>
+											<option value="机器学习/深度学习">机器学习/深度学习</option>
+											<option value="计算机视觉库/人脸识别">计算机视觉库/人脸识别</option>
+											<option value="自然语言处理">自然语言处理</option>
+										</select>
+									</div>
+									<label class="col-sm-1 control-label"><em
+										class="gg-star" style="color: red; font-style: normal;">*&nbsp;</em>开源许可：</label>
+									<div class="col-sm-2">
+										<select class="form-control" name="softLicense"
+											id="softLicense"
+											th:field="*{blogcontent.softcontent.softLicense}">
+											<option value="0">Affero GPL</option>
+											<option value="1">Apache v2 License</option>
+											<option value="2">Artistic License 2.0</option>
+											<option value="3">BSD (3-Clause) License</option>
+											<option value="4">BSD 2-Clause License</option>
+											<option value="5">Eclipse Public License v1.0</option>
+											<option value="6">GPL v2</option>
+											<option value="7">GPL v3</option>
+											<option value="8">LGPL v2.1</option>
+											<option value="9">LGPL v3</option>
+											<option value="10">MIT License</option>
+											<option value="11">Mozilla Public License Version
+												2.0</option>
+											<option value="12">OSL 3.0</option>
+											<option value="13">Public Domain(Unlicense)</option>
+											<option value="14">WTFPL</option>
+											<option value="15">Zlib</option>
+										</select>
+									</div>
+									<label class="col-sm-1 control-label"><em
+										class="gg-star" style="color: red; font-style: normal;">*&nbsp;</em>开发语言：</label>
+									<div class="col-sm-2">
+										<select class="form-control" name="softLanguage"
+											id="softLanguage"
+											th:field="*{blogcontent.softcontent.softLanguage}">
+											<option value="Java">Java</option>
+											<option value="Bash">Bash</option>
+											<option value="C++">C++</option>
+											<option value="C#">C#</option>
+											<option value="CSS">CSS</option>
+											<option value="Delphi">Delphi</option>
+											<option value="diff">diff</option>
+											<option value="VB.NET">VB.NET</option>
+											<option value="Go">Go</option>
+											<option value="Html">HTML</option>
+											<option value="JavaScript">JavaScript</option>
+											<option value="Kotlin">Kotlin</option>
+											<option value="Objective-C">Objective-C</option>
+											<option value="Perl">Perl</option>
+											<option value="PHP">PHP</option>
+											<option value="Python">Python</option>
+											<option value="Ruby">Ruby</option>
+											<option value="SQL">SQL</option>
+											<option value="VBScript">VBScript</option>
+											<option value="Swift">Swift</option>
+										</select>
+									</div>
+									<label class="col-sm-1 control-label"><em
+										class="gg-star" style="color: red; font-style: normal;">*&nbsp;</em>操作系统：</label>
+									<div class="col-sm-2">
+										<select class="form-control" name="softOperateSystem"
+											id="softOperateSystem"
+											th:field="*{blogcontent.softcontent.softOperateSystem}">
+											<option value="跨平台">跨平台</option>
+											<option value="Windows">Windows</option>
+											<option value="Linux">Linux</option>
+										</select>
+									</div>
+								</div>
+
+							</div>
+
+							<div class="text-right form-group">
+								<button class="btn btn-primary" type="submit">发布文章</button>
+								<button type="button" class="btn btn-warning"
+									onclick="update(0)">存为草稿</button>
+								<button th:onclick="'javascript:layer_close()'"
+									class="btn btn-danger" type="button">关闭</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div th:include="include::footer"></div>
+	<script src="/ajax/plugins/bootstrap-fileinput/js/fileinput.min.js"
+		th:src="@{/ajax/plugins/bootstrap-fileinput/js/fileinput.min.js}"></script>
+	<script src="/ajax/plugins/bootstrap-fileinput/js/locales/zh.js"
+		th:src="@{/ajax/plugins/bootstrap-fileinput/js/locales/zh.js  }"></script>
+	<script src="/ajax/plugins/bootstrap-fileinput/js/locales/fr.js"
+		th:src="@{/ajax/plugins/bootstrap-fileinput/js/locales/fr.js  }"></script>
+	<script th:inline="javascript">
+	var basicsetGlobalAllowComment=[[${basicsetGlobalAllowComment}]];
+	var basicsetGlobalAllowReprint=[[${basicsetGlobalAllowReprint}]];
+	var basicsetOpenBlogDownload=[[${basicsetOpenBlogDownload}]];
+	var blogFileName=[[${blogcontent.blogFileName}]];
+	var articleEditor2=[[${blogcontent.articleEditor}]];
+	var blogType=[[${blogcontent.blogType}]];
+	</script>
+	<script>
+	//加载对应css和js
+	//防止以后扩展编辑器产生干扰
+	if(articleEditor2==1){
+		//Markdown
+		dynamicLoadCssFile('/js/plugins/markdown/simplemde.min.css');
+		dynamicLoadCssFile('/js/plugins/markdown/github-markdown.min.css');
+		dynamicLoadCssFile('/js/plugins/markdown/highlight.min.css');
+		dynamicLoadJsFileOnBody('/js/plugins/markdown/highlight.min.js');
+
+        // 设置每个脚本等待,并行下载后循序执行
+		$LAB.setOptions({AlwaysPreserveOrder:true})
+	    .script("/js/plugins/markdown/simplemde.min.js")
+	    .script("/rzblog/blog/blogcontent/edit.js");
+		
+	}else if(articleEditor2==2){
+		//simditor
+		dynamicLoadCssFile('/ajax/libs/simditor/css/simditor.css');
+        // 设置每个脚本等待,并行下载后循序执行
+		$LAB.setOptions({AlwaysPreserveOrder:true})
+	    .script("/ajax/libs/simditor/js/module.js")
+	    .script("/ajax/libs/simditor/js/hotkeys.js")
+	    .script("/ajax/libs/simditor/js/uploader.js")
+	    .script("/ajax/libs/simditor/js/simditor.js")
+	    .script("/rzblog/blog/blogcontent/edit.js"); 
+        
+	}else{
+		//默认summenote
+		dynamicLoadCssFile('/css/plugins/summernote/summernote-0.8.8.css');
+        // 设置每个脚本等待,并行下载后循序执行
+		$LAB.setOptions({AlwaysPreserveOrder:true})
+	    .script("/js/plugins/summernote/summernote.js")
+	    .script("/js/plugins/summernote/summernote-zh-CN.min.js")
+	    .script("/js/plugins/summernote/ajax-util.js")
+	    .script("/rzblog/blog/blogcontent/edit.js");
+	}
+	</script>
+	<script src="/ajax/libs/iCheck/icheck.min.js"
+		th:src="@{/ajax/libs/iCheck/icheck.min.js}"></script>
+	<script>
+		$(document).ready(function() {
+			$(".i-checks").iCheck({
+				checkboxClass : "icheckbox_square-green",
+				radioClass : "iradio_square-green",
+			})
+		});
+	</script>
+	<script th:inline="javascript">
+		var cover=[[${blogcontent.cover}]];
+		var addWaterMark="true";
+		//显示
+		if(cover!=null&&cover!=''){
+			$("#show1").css('display', 'block');
+			document.getElementById("showImg1").src = cover;
+		}
+		//上传绑定
+		// 上传文件
+		$("#file-1").fileinput({
+			language : 'zh', // 设置语言
+			uploadUrl : ctx + "blog/blogcontent/uploadBlogImg?blogFileName="+blogFileName+"&addWaterMark="+addWaterMark,
+			allowedFileExtensions : [ 'jpg', 'png', 'jpeg',
+										'gif' ],// 接收的文件后缀
+			showUpload : true, // 是否显示上传按钮
+			showRemove : false, // 是否显示移除按钮
+			showCaption : false,// 是否显示标题
+			browseClass : "btn btn-primary", // 按钮样式
+			dropZoneEnabled : true,//是否显示拖拽区域
+			uploadAsync : true,
+			showBrowse : true,
+			browseOnZoneClick : false,
+			maxFileCount : 1, // 表示允许同时上传的最大文件个数
+			enctype : 'multipart/form-data',
+			maxFileSize : 3096
+		// 单位为kb，如果为0表示不限制文件大小
+		}).on("filebatchselected", function(event, files) {
+			//返回文件名
+		}).on('filesuccessremove', function(event, id){
+			$("#show1").css('display', 'none');
+			cover=null;
+		}).on("fileuploaded", function(event, data) {
+			//返回文件名
+			cover = (data.response.code == 0) ? (data.response.fileName) : null;
+			blogFileName = (data.response.code == 0) ? (data.response.folderName) : null;
+			$("#show1").css('display', 'block');
+			document.getElementById("showImg1").src = cover;
+		});
+	</script>
+</body>
+</html>

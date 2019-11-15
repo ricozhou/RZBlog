@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<link href="/ajax/libs/iCheck/custom.css"
+	th:href="@{/ajax/libs/iCheck/custom.css}" rel="stylesheet" />
+<link href="/ajax/libs/datapicker/datepicker3.css"
+	th:href="@{/ajax/libs/datapicker/datepicker3.css}" rel="stylesheet" />
+<!-- 上传插件 -->
+<link rel="stylesheet"
+	href="/ajax/plugins/bootstrap-fileinput/css/fileinput.css"
+	th:href="@{/ajax/plugins/bootstrap-fileinput/css/fileinput.css}" />
+<link href="/css/font-awesome.css" th:href="@{/css/font-awesome.css}"
+	rel="stylesheet" />
+<body class="white-bg">
+	<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+		<form class="form-horizontal m" id="form-blogadvertisement-edit">
+			<input id="blogAdId" name="blogAdId"
+				th:value="${blogadvertisement.blogAdId}" type="hidden">
+			<div class="form-group">
+				<label class="col-sm-2 control-label"><em class="gg-star"
+					style="color: red; font-style: normal;">*&nbsp;</em>广告名称：</label>
+				<div class="col-sm-10">
+					<input id="adName" name="adName"
+						th:value="${blogadvertisement.adName}" class="form-control"
+						type="text">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">广告内容：</label>
+				<div class="col-sm-10">
+					<textarea id="adContent" name="adContent" class="form-control"
+						th:text="${blogadvertisement.adContent}" rows='6' type="text"></textarea>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">广告商：</label>
+				<div class="col-sm-4">
+					<input id="adCompany" name="adCompany" class="form-control"
+						th:value="${blogadvertisement.adCompany}" type="text">
+				</div>
+				<label class="col-sm-2 control-label">广告费用：</label>
+				<div class="col-sm-3">
+					<input id="adCost" name="adCost" class="form-control" type="text"
+						th:value="${blogadvertisement.adCost}">
+				</div>
+				<div class="col-sm-1">
+					<input id="adCostCurrency" name="adCostCurrency"
+						class="form-control" type="text" value="人民币" disabled>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">广告类型：</label>
+				<div class="col-sm-3">
+					<select class="form-control" name="adType" id="adType"
+						th:field="*{blogadvertisement.adType}">
+						<option value="产品">产品</option>
+						<option value="品牌">品牌</option>
+						<option value="观念">观念</option>
+						<option value="公益">公益</option>
+						<option value="其他">其他</option>
+					</select>
+				</div>
+				<label class="col-sm-2 control-label">投放位置：</label>
+				<div class="col-sm-5">
+					<label class="checkbox-inline i-checks"> <input
+						th:checked="${blogadvertisement.adPlacementMain == 0 ? true : false}"
+						name="adPlacementMain" id="adPlacementMain" type="checkbox">主页随机
+					</label> <label class="checkbox-inline i-checks"> <input
+						th:checked="${blogadvertisement.adPlacementConcent == 0 ? true : false}"
+						name="adPlacementConcent" id="adPlacementConcent" type="checkbox">内容页底部
+					</label> <label class="checkbox-inline i-checks"> <input
+						th:checked="${blogadvertisement.adPlacementSider == 0 ? true : false}"
+						name="adPlacementSider" id="adPlacementSider" type="checkbox">侧边栏
+					</label>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">广告图片：</label>
+				<div class="col-sm-10">
+					<input id="file-1" class="file" type="file" name="file">
+				</div>
+			</div>
+			<div class="form-group" id="show2" align="center"
+				style="display: none">
+				<label class="col-sm-2 control-label"></label>
+				<div class="col-sm-10">
+					<img id="showImg2" width="510" height="300" src=""></img>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">广告链接：</label>
+				<div class="col-sm-10">
+					<input id="adUrl" name="adUrl" class="form-control" type="text"
+						th:value="${blogadvertisement.adUrl}">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label"><em class="gg-star"
+					style="color: red; font-style: normal;">*&nbsp;</em>开始时间：</label>
+				<div class="col-sm-4">
+					<div class="input-group date">
+						<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+						<input type="text" class="form-control" readonly
+							th:value="${blogadvertisement.adStartIme}" name="startDateTime"
+							id="startDateTime" />
+					</div>
+				</div>
+				<label class="col-sm-2 control-label"><em class="gg-star"
+					style="color: red; font-style: normal;">*&nbsp;</em>结束时间：</label>
+				<div class="col-sm-4">
+					<div class="input-group date">
+						<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+						<input type="text" class="form-control" readonly
+							th:value="${blogadvertisement.adEndIme}" name="endDateTime"
+							id="endDateTime" />
+					</div>
+				</div>
+
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">广告状态：</label>
+				<div class="col-sm-10">
+					<div class="onoffswitch">
+						<input type="checkbox"
+							th:checked="${blogadvertisement.status == 0 ? true : false}"
+							class="onoffswitch-checkbox" id="status" name="status"> <label
+							class="onoffswitch-label" for="status"> <span
+							class="onoffswitch-inner"></span> <span
+							class="onoffswitch-switch"></span>
+						</label>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">备注：</label>
+				<div class="col-sm-10">
+					<input id="remark" name="remark" class="form-control" type="text"
+						th:value="${blogadvertisement.remark}">
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="form-control-static col-sm-offset-9">
+					<button type="submit" class="btn btn-primary">提交</button>
+					<button th:onclick="'javascript:layer_close()'"
+						class="btn btn-danger" type="button">关闭</button>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div th:include="include::footer"></div>
+	<script src="/ajax/libs/datapicker/bootstrap-datepicker.js"
+		th:src="@{/ajax/libs/datapicker/bootstrap-datepicker.js}"></script>
+	<script src="/ajax/libs/iCheck/icheck.min.js"
+		th:src="@{/ajax/libs/iCheck/icheck.min.js}"></script>
+	<script src="/ajax/plugins/bootstrap-fileinput/js/fileinput.min.js"
+		th:src="@{/ajax/plugins/bootstrap-fileinput/js/fileinput.min.js}"></script>
+	<script src="/ajax/plugins/bootstrap-fileinput/js/locales/zh.js"
+		th:src="@{/ajax/plugins/bootstrap-fileinput/js/locales/zh.js  }"></script>
+	<script src="/ajax/plugins/bootstrap-fileinput/js/locales/fr.js"
+		th:src="@{/ajax/plugins/bootstrap-fileinput/js/locales/fr.js  }"></script>
+	<script>
+		$(document).ready(function() {
+			$(".i-checks").iCheck({
+				checkboxClass : "icheckbox_square-green",
+				radioClass : "iradio_square-green",
+			})
+		});
+		$(".input-group.date").datepicker({
+			todayBtn : "linked",
+			keyboardNavigation : !1,
+			forceParse : !1,
+			calendarWeeks : !0,
+			autoclose : !0
+		});
+	</script>
+
+	<script th:inline="javascript">
+		var adStartIme=[[${blogadvertisement.adStartIme}]];
+		var adEndIme=[[${blogadvertisement.adEndIme}]];
+		var fileBase64_1=[[${blogadvertisement.adImage}]];
+		//显示
+		if(fileBase64_1!=null&&fileBase64_1!=''){
+			$("#show2").css('display', 'block');
+			document.getElementById("showImg2").src = fileBase64_1;
+		}
+		//上传绑定
+		// 上传文件
+		$("#file-1")
+				.fileinput(
+						{
+							language : 'zh', // 设置语言
+							uploadUrl : ctx
+									+ "blog/blogcontent/uploadBlogImg?blogFileName=blogadvertisement&addWaterMark=false",
+							allowedFileExtensions : [ 'jpg', 'png', 'jpeg',
+									'gif' ],// 接收的文件后缀
+							showUpload : true, // 是否显示上传按钮
+							showRemove : false, // 是否显示移除按钮
+							showCaption : false,// 是否显示标题
+							browseClass : "btn btn-primary", // 按钮样式
+							dropZoneEnabled : true,//是否显示拖拽区域
+							uploadAsync : true,
+							showBrowse : true,
+							browseOnZoneClick : false,
+							maxFileCount : 1, // 表示允许同时上传的最大文件个数
+							enctype : 'multipart/form-data',
+							maxFileSize : 10240
+						// 单位为kb，如果为0表示不限制文件大小
+						})
+				.on("filebatchselected", function(event, files) {
+					//返回文件名
+				})
+				.on('filesuccessremove', function(event, id) {
+					$("#show2").css('display', 'none');
+					fileBase64_1 = null;
+				})
+				.on(
+						"fileuploaded",
+						function(event, data) {
+							//返回文件名,改过，实际返回base64编码
+							//更改，直接返回路径
+							fileBase64_1 = (data.response.code == 0) ? (data.response.fileName)
+									: null;
+							$("#show2").css('display', 'block');
+							document.getElementById("showImg2").src = fileBase64_1;
+						});
+	</script>
+	<script src="/rzblog/blog/blogadvertisement/edit.js"
+		th:src="@{/rzblog/blog/blogadvertisement/edit.js}">
+		
+	</script>
+</body>
+</html>
