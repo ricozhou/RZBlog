@@ -34,7 +34,7 @@
 		<bitwalker.version>1.19</bitwalker.version>
 		<lombok.version>1.16.18</lombok.version>
 		<velocity.version>1.7</velocity.version>
-		<quartz.version>2.3.0</quartz.version>
+		<quartz.version>2.3.2</quartz.version>
 		<kaptcha.version>2.3.2</kaptcha.version>
 		<poi.version>3.17</poi.version>
 		<htmlunit.version>2.30</htmlunit.version>
