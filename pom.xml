@@ -39,7 +39,7 @@
 		<poi.version>3.17</poi.version>
 		<htmlunit.version>2.30</htmlunit.version>
 		<swagger.version>2.7.0</swagger.version>
-		<jsoup.version>1.11.3</jsoup.version>
+		<jsoup.version>1.14.2</jsoup.version>
 		<itextpdf.version>5.5.13</itextpdf.version>
 		<oshi.version>3.9.1</oshi.version>
 	</properties>
