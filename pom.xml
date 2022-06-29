@@ -36,7 +36,7 @@
 		<velocity.version>1.7</velocity.version>
 		<quartz.version>2.3.0</quartz.version>
 		<kaptcha.version>2.3.2</kaptcha.version>
-		<poi.version>3.17</poi.version>
+		<poi.version>4.1.1</poi.version>
 		<htmlunit.version>2.30</htmlunit.version>
 		<swagger.version>2.7.0</swagger.version>
 		<jsoup.version>1.11.3</jsoup.version>
